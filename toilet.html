@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extras - Bitez</title>
+    <!-- Google Fonts for the Inter font family -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* General Body and Container Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Reusable button styles */
+        .btn {
+            font-weight: 700;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e40af;
+            transform: scale(1.05);
+        }
+
+        /* --- Header Section --- */
+        .header {
+            background-color: #fff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        /* Navigation Links */
+        .nav-links {
+            display: none; /* Hide on mobile by default */
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4b5563;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #2563eb;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: block; /* Show on mobile */
+        }
+        .mobile-menu {
+            display: none;
+            background-color: #fff;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+        .mobile-menu a, .mobile-menu button {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #1f2937;
+            text-decoration: none;
+        }
+        .mobile-menu a:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* --- Main Content Section --- */
+        .main-content {
+            padding: 5rem 0;
+            background-color: #f9fafb;
+            text-align: center;
+        }
+        .main-content-grid {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: stretch;
+        }
+        @media (min-width: 768px) {
+            .main-content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .content-card {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .content-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* --- Bar Chart Styles --- */
+        .chart-container {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding-bottom: 1.5rem;
+            position: relative;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .bar {
+            width: 12%;
+            background-color: #4a90e2;
+            border-radius: 0.25rem 0.25rem 0 0;
+            position: relative;
+            transition: height 0.5s ease-in-out;
+            margin: 0 4px;
+            cursor: pointer;
+        }
+        .bar-label {
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #4b5563;
+        }
+        .tooltip {
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1f2937;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .bar:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* --- Form Styles --- */
+        #play-input-form {
+            width: 100%;
+            text-align: left;
+        }
+        #play-input-form label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.25rem;
+        }
+        #play-input-form input[type="number"],
+        #play-input-form select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+        }
+        #play-input-form button {
+            width: 100%;
+        }
+
+        /* --- Toilet & Water Styles --- */
+        .stat-card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .stat-card-content .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .stat-card-content .count {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .stat-card-content .button-group {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn-secondary {
+            background-color: #fff;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+        .btn-secondary:hover {
+            background-color: #2563eb;
+            color: #fff;
+        }
+
+        /* --- Footer Section --- */
+        .footer {
+            background-color: #111827;
+            color: #fff;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-link {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-link:hover {
+            color: #fff;
+        }
+
+        /* --- Media Queries for Responsiveness --- */
+        @media (min-width: 1024px) {
+            .nav-links {
+                display: flex;
+            }
+            .mobile-menu-btn, .mobile-menu {
+                display: none !important;
+            }
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .footer-links {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <nav class="container">
+            <div class="header-content">
+                <!-- Logo/Brand Name -->
+                <a href="index.html" class="logo-link">Bitez</a>
+                
+                <!-- Desktop Navigation Links -->
+                <div class="nav-links">
+                    <a href="index.html#features" class="nav-link">Features</a>
+                    <a href="index.html#about">About</a>
+                    <a href="index.html#contact">Contact</a>
+                    <button class="btn btn-primary">Get Started</button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="mobile-menu-btn">
+                    <!-- Hamburger Icon -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Navigation Menu (Hidden by default) -->
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="index.html#features">Features</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+            <div class="px-6 py-2">
+                <button class="btn btn-primary" style="width: 100%;">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="text-3xl font-bold mb-4">Extras Page</h1>
+            <div class="main-content-grid">
+
+                <!-- Card for Play Log -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold">Play Log (hours)</h3>
+                    </div>
+                    <div class="chart-container" id="play-bar-chart">
+                        <!-- Bars will be generated by JavaScript -->
+                    </div>
+                    <form id="play-input-form" class="w-full text-left mt-auto">
+                        <div class="mb-4">
+                            <label for="play-day" class="block text-sm font-medium text-gray-700">Day</label>
+                            <select id="play-day" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
+                                <option value="0">Monday</option>
+                                <option value="1">Tuesday</option>
+                                <option value="2">Wednesday</option>
+                                <option value="3">Thursday</option>
+                                <option value="4">Friday</option>
+                                <option value="5">Saturday</option>
+                                <option value="6">Sunday</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="play-hours" class="block text-sm font-medium text-gray-700">Hours Played</label>
+                            <input type="number" id="play-hours" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2" placeholder="e.g., 1.5">
+                        </div>
+                        <div class="flex justify-end mt-4">
+                            <button type="submit" class="btn btn-primary">Add Play</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Card for Toilet Breaks -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold">Toilet Breaks Today</h3>
+                    </div>
+                    <div class="stat-card-content flex-grow flex flex-col justify-center">
+                        <div class="emoji">💩</div>
+                        <div class="count" id="poop-count">0</div>
+                    </div>
+                    <div class="button-group mt-auto">
+                        <button class="btn btn-primary" id="add-poop-btn">Add Poop</button>
+                        <button class="btn btn-secondary" id="reset-poop-btn">Reset</button>
+                    </div>
+                </div>
+
+                 <!-- Card for Bowls Drank -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold">Bowls Drank Today</h3>
+                    </div>
+                    <div class="stat-card-content flex-grow flex flex-col justify-center">
+                        <div class="emoji">🥣</div>
+                        <div class="count" id="bowls-drank-count">0</div>
+                    </div>
+                    <div class="button-group mt-auto">
+                        <button class="btn btn-primary" id="add-bowls-drank-btn">Add Bowl</button>
+                        <button class="btn btn-secondary" id="reset-bowls-drank-btn">Reset</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Bitez. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for all interactions -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Get the current day of the week (0 = Monday, 1 = Tuesday, ...)
+        const todayIndex = (new Date().getDay() + 6) % 7;
+        const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const playLogKey = 'playLog';
+        const poopCountKey = 'poopCount';
+        const bowlsDrankKey = 'bowlsDrank';
+        const lastUpdatedPlayKey = 'lastUpdatedPlay';
+        const lastUpdatedPoopKey = 'lastUpdatedPoop';
+        const lastUpdatedBowlsKey = 'lastUpdatedBowls';
+
+        function loadFromLocalStorage(key, defaultValue) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        }
+
+        function saveToLocalStorage(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // --- Play Log Logic ---
+        function updatePlayLogForNewDay() {
+            const lastUpdated = localStorage.getItem(lastUpdatedPlayKey);
+            const today = new Date().toDateString();
+
+            if (lastUpdated !== today) {
+                let playData = loadFromLocalStorage(playLogKey, Array(7).fill(0));
+                playData.shift(); // Remove the oldest day
+                playData.push(0); // Add a new day with 0 hours
+                saveToLocalStorage(playLogKey, playData);
+                localStorage.setItem(lastUpdatedPlayKey, today);
+            }
+        }
+        
+        const playBarChart = document.getElementById('play-bar-chart');
+        updatePlayLogForNewDay();
+        let playData = loadFromLocalStorage(playLogKey, Array(7).fill(0));
+
+        function renderPlayBarChart() {
+            playBarChart.innerHTML = '';
+            const maxHours = Math.max(...playData, 1);
+            
+            const displayedDays = daysOfWeek;
+            const displayedData = playData;
+
+            displayedData.forEach((hours, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                const height = (hours / maxHours) * 100;
+                bar.style.height = `${height}%`;
+                bar.innerHTML = `
+                    <span class="bar-label">${displayedDays[index]}</span>
+                    <div class="tooltip">${hours.toFixed(1)} hrs</div>
+                `;
+                playBarChart.appendChild(bar);
+            });
+        }
+        renderPlayBarChart();
+
+        const playInputForm = document.getElementById('play-input-form');
+        const playDaySelect = document.getElementById('play-day');
+        const playHoursInput = document.getElementById('play-hours');
+        
+        playDaySelect.value = todayIndex;
+
+        playInputForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const dayIndex = parseInt(playDaySelect.value);
+            const hours = parseFloat(playHoursInput.value);
+
+            if (!isNaN(hours) && hours > 0) {
+                playData[dayIndex] += hours;
+                saveToLocalStorage(playLogKey, playData);
+                renderPlayBarChart();
+                playHoursInput.value = '';
+            } else {
+                alert('Please enter a valid number of hours.');
+            }
+        });
+
+        // --- Toilet Breaks Logic ---
+        function updatePoopCountForNewDay() {
+            const lastUpdated = localStorage.getItem(lastUpdatedPoopKey);
+            const today = new Date().toDateString();
+            if (lastUpdated !== today) {
+                saveToLocalStorage(poopCountKey, 0);
+                localStorage.setItem(lastUpdatedPoopKey, today);
+            }
+        }
+
+        const poopCountSpan = document.getElementById('poop-count');
+        const addPoopBtn = document.getElementById('add-poop-btn');
+        const resetPoopBtn = document.getElementById('reset-poop-btn');
+        updatePoopCountForNewDay();
+        let poopCount = loadFromLocalStorage(poopCountKey, 0);
+
+        function renderPoopCount() {
+            poopCountSpan.textContent = poopCount;
+        }
+        renderPoopCount();
+
+        addPoopBtn.addEventListener('click', () => {
+            poopCount++;
+            saveToLocalStorage(poopCountKey, poopCount);
+            renderPoopCount();
+        });
+        
+        resetPoopBtn.addEventListener('click', () => {
+            poopCount = 0;
+            saveToLocalStorage(poopCountKey, poopCount);
+            renderPoopCount();
+        });
+
+        // --- Bowls Drank Logic ---
+        function updateBowlsDrankForNewDay() {
+            const lastUpdated = localStorage.getItem(lastUpdatedBowlsKey);
+            const today = new Date().toDateString();
+            if (lastUpdated !== today) {
+                saveToLocalStorage(bowlsDrankKey, 0);
+                localStorage.setItem(lastUpdatedBowlsKey, today);
+            }
+        }
+
+        const bowlsDrankCountSpan = document.getElementById('bowls-drank-count');
+        const addBowlsDrankBtn = document.getElementById('add-bowls-drank-btn');
+        const resetBowlsDrankBtn = document.getElementById('reset-bowls-drank-btn');
+        updateBowlsDrankForNewDay();
+        let bowlsDrankCount = loadFromLocalStorage(bowlsDrankKey, 0);
+
+        function renderBowlsDrankCount() {
+            bowlsDrankCountSpan.textContent = bowlsDrankCount;
+        }
+        renderBowlsDrankCount();
+
+        addBowlsDrankBtn.addEventListener('click', () => {
+            bowlsDrankCount++;
+            saveToLocalStorage(bowlsDrankKey, bowlsDrankCount);
+            renderBowlsDrankCount();
+        });
+        
+        resetBowlsDrankBtn.addEventListener('click', () => {
+            bowlsDrankCount = 0;
+            saveToLocalStorage(bowlsDrankKey, bowlsDrankCount);
+            renderBowlsDrankCount();
+        });
+
+        window.addEventListener('resize', () => {
+            renderPlayBarChart();
+        });
+    </script>
+</body>
+</html>

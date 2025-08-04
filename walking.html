@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walking - Bitez</title>
+    <!-- Google Fonts for the Inter font family -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* General Body and Container Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Reusable button styles */
+        .btn {
+            font-weight: 700;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e40af;
+            transform: scale(1.05);
+        }
+
+        /* --- Header Section --- */
+        .header {
+            background-color: #fff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        /* Navigation Links */
+        .nav-links {
+            display: none; /* Hide on mobile by default */
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4b5563;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #2563eb;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: block; /* Show on mobile */
+        }
+        .mobile-menu {
+            display: none;
+            background-color: #fff;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+        .mobile-menu a, .mobile-menu button {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #1f2937;
+            text-decoration: none;
+        }
+        .mobile-menu a:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* --- Main Content Section --- */
+        .main-content {
+            padding: 5rem 0;
+            background-color: #f9fafb;
+            text-align: center;
+        }
+        .main-content-grid {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: stretch; /* Correctly align items to stretch and fill space */
+        }
+        @media (min-width: 768px) {
+            .main-content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .full-width-card {
+                grid-column: span 2;
+                transform: translateY(-25px);
+            }
+        }
+        
+        .content-card {
+            background-color: #fff; /* White background for the cards */
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .content-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .add-btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.5rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .add-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* --- Bar Chart Styles --- */
+        .chart-container {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding-bottom: 1.5rem;
+            position: relative;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .bar {
+            width: 12%;
+            background-color: #4a90e2;
+            border-radius: 0.25rem 0.25rem 0 0;
+            position: relative;
+            transition: height 0.5s ease-in-out;
+            margin: 0 4px;
+            cursor: pointer;
+        }
+        .bar-label {
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #4b5563;
+        }
+        .tooltip {
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1f2937;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .bar:hover .tooltip {
+            opacity: 1;
+        }
+        
+        /* --- Form Styles --- */
+        #add-walk-form {
+            width: 100%;
+            text-align: left;
+        }
+        #add-walk-form label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.25rem;
+        }
+        #add-walk-form input[type="text"],
+        #add-walk-form input[type="number"],
+        #add-walk-form select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+        }
+        #add-walk-form button {
+            width: 100%;
+        }
+
+        /* Progress Circle Styles */
+        .progress-circle {
+            width: 180px; /* Increased size */
+            height: 180px; /* Increased size */
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+        .progress-circle svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .progress-circle .bg-circle {
+            stroke: #e2e8f0;
+            stroke-width: 10;
+            fill: none;
+        }
+        .progress-circle .progress {
+            stroke: #4a90e2;
+            stroke-width: 10;
+            fill: none;
+            transition: stroke-dashoffset 0.5s ease-in-out;
+        }
+        .progress-circle .progress.goal-met {
+            stroke: #10b981;
+        }
+        .progress-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .progress-circle-text .current-progress {
+            font-size: 2.2rem;
+            display: block;
+        }
+        
+        /* Size Dropdown Styles */
+        #dog-size {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+        
+        /* --- Footer Section --- */
+        .footer {
+            background-color: #111827;
+            color: #fff;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-link {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-link:hover {
+            color: #fff;
+        }
+
+        /* --- Media Queries for Responsiveness --- */
+        @media (min-width: 1024px) {
+            .nav-links {
+                display: flex;
+            }
+            .mobile-menu-btn, .mobile-menu {
+                display: none !important;
+            }
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .footer-links {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body class="scroll-smooth">
+
+    <!-- Header Section -->
+    <header class="header">
+        <nav class="container">
+            <div class="header-content">
+                <!-- Logo/Brand Name -->
+                <a href="index.html" class="logo-link">Bitez</a>
+                
+                <!-- Desktop Navigation Links -->
+                <div class="nav-links">
+                    <a href="index.html#features" class="nav-link">Features</a>
+                    <a href="index.html#about" class="nav-link">About</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                    <button class="btn btn-primary">Get Started</button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="mobile-menu-btn">
+                    <!-- Hamburger Icon -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Navigation Menu (Hidden by default) -->
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="index.html#features">Features</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+            <div class="px-6 py-2">
+                <button class="btn btn-primary" style="width: 100%;">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="text-3xl font-bold mb-4">Walking Page</h1>
+            <div class="main-content-grid">
+
+                <!-- Card for 7-Day Walking Log -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold">7-Day Walking Log (km)</h3>
+                    </div>
+                    <div class="chart-container" id="bar-chart">
+                        <!-- Bars will be generated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Card for Add a Walk -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold">Add a Walk</h3>
+                    </div>
+                    <form id="add-walk-form" class="w-full text-left">
+                        <div class="mb-4">
+                            <label for="walk-day" class="block text-sm font-medium text-gray-700">Day</label>
+                            <select id="walk-day" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
+                                <option value="0">Monday</option>
+                                <option value="1">Tuesday</option>
+                                <option value="2">Wednesday</option>
+                                <option value="3">Thursday</option>
+                                <option value="4">Friday</option>
+                                <option value="5">Saturday</option>
+                                <option value="6">Sunday</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="walk-location" class="block text-sm font-medium text-gray-700">Location</label>
+                            <input type="text" id="walk-location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2" placeholder="e.g., Park, Beach">
+                        </div>
+                        <div class="mb-4">
+                            <label for="walk-distance" class="block text-sm font-medium text-gray-700">Distance (km)</label>
+                            <input type="number" id="walk-distance" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2" placeholder="e.g., 2.5">
+                        </div>
+                        <div class="flex justify-end mt-4">
+                            <button type="submit" class="btn btn-primary">Add Walk</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Card for Weekly Walking Goal -->
+                <div class="content-card full-width-card">
+                    <div class="progress-circle" id="weekly-goal-circle-container">
+                        <svg>
+                            <circle class="bg-circle" cx="90" cy="90" r="80"></circle>
+                            <circle class="progress" id="weekly-goal-progress" cx="90" cy="90" r="80"></circle>
+                        </svg>
+                        <div class="progress-circle-text" id="weekly-goal-text">
+                            <span class="current-progress">0.0 km</span>
+                            / <span>0 km</span>
+                        </div>
+                    </div>
+                    <form id="set-goal-form" class="w-full text-left">
+                        <div class="mb-4">
+                            <label for="dog-size" class="block text-sm font-medium text-gray-700">Dog Size</label>
+                            <select id="dog-size" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2">
+                                <option value="small">🐾 Small</option>
+                                <option value="medium">🐶 Medium</option>
+                                <option value="large">🐕 Large</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Bitez. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for all interactions -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Get the current day of the week (0 = Monday, 1 = Tuesday, ...)
+        const todayIndex = (new Date().getDay() + 6) % 7;
+        const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const walkLogKey = 'walkLog';
+        const lastUpdatedKey = 'lastUpdated';
+        const goalKey = 'weeklyGoal';
+        const dogSizeKey = 'dogSize';
+
+        function loadFromLocalStorage(key, defaultValue) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        }
+
+        function saveToLocalStorage(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Check if a new day has started and update the log
+        function updateLogForNewDay() {
+            const lastUpdated = localStorage.getItem(lastUpdatedKey);
+            const today = new Date().toDateString();
+
+            if (lastUpdated !== today) {
+                let walkData = loadFromLocalStorage(walkLogKey, Array(7).fill(0));
+                walkData.shift(); // Remove the oldest day
+                walkData.push(0); // Add a new day with 0 walks
+                saveToLocalStorage(walkLogKey, walkData);
+                localStorage.setItem(lastUpdatedKey, today);
+                return true;
+            }
+            return false;
+        }
+        
+        // Bar Chart Logic
+        const barChart = document.getElementById('bar-chart');
+        updateLogForNewDay(); // Check and update on page load
+        let walkData = loadFromLocalStorage(walkLogKey, Array(7).fill(0));
+        
+        function renderBarChart() {
+            barChart.innerHTML = '';
+            const maxDistance = Math.max(...walkData, 1); // Avoid division by zero
+            
+            const displayedDays = daysOfWeek;
+            const displayedData = walkData;
+
+            displayedData.forEach((distance, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                const height = (distance / maxDistance) * 100;
+                bar.style.height = `${height}%`;
+                bar.innerHTML = `
+                    <span class="bar-label">${displayedDays[index]}</span>
+                    <div class="tooltip">${distance.toFixed(1)} km</div>
+                `;
+                barChart.appendChild(bar);
+            });
+        }
+        renderBarChart();
+
+        // --- Add a Walk Logic ---
+        const addWalkForm = document.getElementById('add-walk-form');
+        const walkDaySelect = document.getElementById('walk-day');
+        const walkLocationInput = document.getElementById('walk-location');
+        const walkDistanceInput = document.getElementById('walk-distance');
+        
+        // Set the default selected day to the current day
+        walkDaySelect.value = todayIndex;
+
+        addWalkForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const dayIndex = parseInt(walkDaySelect.value);
+            const location = walkLocationInput.value.trim();
+            const distance = parseFloat(walkDistanceInput.value);
+
+            if (location && !isNaN(distance) && distance > 0) {
+                // Update walk distance for the selected day
+                walkData[dayIndex] += distance;
+                saveToLocalStorage(walkLogKey, walkData);
+                renderBarChart();
+                
+                // Update weekly goal progress
+                updateGoalProgress();
+                
+                walkLocationInput.value = '';
+                walkDistanceInput.value = '';
+            } else {
+                alert('Please enter a valid location and distance.');
+            }
+        });
+        
+        // --- Weekly Walking Goal Logic ---
+        const weeklyGoalProgress = document.getElementById('weekly-goal-progress');
+        const weeklyGoalText = document.getElementById('weekly-goal-text');
+        const dogSizeSelect = document.getElementById('dog-size');
+        const circumference = 2 * Math.PI * 80; // For progress circle
+        
+        // Dog size to KM lookup table
+        const sizeToGoal = {
+            'small': 10,
+            'medium': 15,
+            'large': 20
+        };
+        const sizeToColor = {
+            'small': '#4a90e2',
+            'medium': '#10b981',
+            'large': '#1e40af'
+        };
+
+        function updateGoalProgress() {
+            const currentTotalDistance = walkData.reduce((sum, val) => sum + val, 0);
+            const weeklyGoal = parseFloat(sizeToGoal[dogSizeSelect.value] || 10);
+            const progressPercentage = Math.min(currentTotalDistance / weeklyGoal, 1);
+            const progress = progressPercentage * circumference;
+            weeklyGoalProgress.style.strokeDashoffset = circumference - progress;
+            
+            const selectedSize = dogSizeSelect.value;
+            weeklyGoalProgress.style.stroke = sizeToColor[selectedSize];
+            
+            weeklyGoalText.innerHTML = `
+                <span class="current-progress">${currentTotalDistance.toFixed(1)} km</span>
+                / <span>${weeklyGoal} km</span>
+            `;
+        }
+
+        // Set initial goal from localStorage
+        const savedSize = localStorage.getItem(dogSizeKey) || 'medium';
+        dogSizeSelect.value = savedSize;
+        updateGoalProgress();
+        
+        dogSizeSelect.addEventListener('change', () => {
+            const selectedSize = dogSizeSelect.value;
+            localStorage.setItem(dogSizeKey, selectedSize);
+            updateGoalProgress();
+        });
+        
+        weeklyGoalProgress.style.strokeDasharray = `${circumference}, ${circumference}`;
+        
+        window.addEventListener('resize', () => {
+            renderBarChart();
+            updateGoalProgress();
+        });
+
+    </script>
+</body>
+</html>

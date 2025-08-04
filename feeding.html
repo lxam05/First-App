@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feeding - Bitez</title>
+    <!-- Google Fonts for the Inter font family -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* General Body and Container Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Reusable button styles */
+        .btn {
+            font-weight: 700;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e40af;
+            transform: scale(1.05);
+        }
+
+        /* --- Header Section --- */
+        .header {
+            background-color: #fff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        /* Navigation Links */
+        .nav-links {
+            display: none; /* Hide on mobile by default */
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4b5563;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #2563eb;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: block; /* Show on mobile */
+        }
+        .mobile-menu {
+            display: none;
+            background-color: #fff;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+        .mobile-menu a, .mobile-menu button {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #1f2937;
+            text-decoration: none;
+        }
+        .mobile-menu a:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* --- Main Content Section --- */
+        .main-content {
+            padding: 5rem 0;
+            background-color: #f9fafb;
+            text-align: center;
+        }
+        .main-content-grid {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: flex-start;
+        }
+        @media (min-width: 768px) {
+            .main-content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .content-card {
+            background-color: #fff; /* White background for the cards */
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 250px; /* Ensures cards have a minimum height for better alignment */
+        }
+        .content-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .add-btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.5rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .add-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Progress Circle Styles */
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+        .progress-circle svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .progress-circle .bg-circle {
+            stroke: #e2e8f0; /* Gray background */
+            stroke-width: 10;
+            fill: none;
+        }
+        .progress-circle .progress {
+            stroke: #4a90e2; /* Blue progress fill */
+            stroke-width: 10;
+            fill: none;
+            transition: stroke-dashoffset 0.5s ease-in-out; /* Adjusted transition for smooth animation */
+        }
+        .progress-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: auto; /* Pushes the button container to the bottom of the flex card */
+            width: 100%;
+            max-width: 250px; /* Limit button container width */
+        }
+        .btn-secondary {
+            background-color: #fff;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+        .btn-secondary:hover {
+            background-color: #2563eb;
+            color: #fff;
+        }
+        
+        /* List styles for content cards */
+        .content-card ul {
+            list-style: disc; /* Added disc style for bullet points */
+            padding-left: 1.5rem; /* Added padding for bullet points */
+            text-align: left;
+            margin: 0 auto;
+            width: 100%; /* Ensure the list takes up the full width of the card */
+            margin-top: 1rem; /* Adjust spacing below the title */
+        }
+        .content-card li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .content-card li:last-child {
+            border-bottom: none;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 1rem;
+        }
+        
+        /* Slider styles */
+        .slider-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .slider {
+            width: 80%;
+            -webkit-appearance: none;
+            height: 8px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            background-image: linear-gradient(to right, #4a90e2 0%, #a2d2ff 100%);
+        }
+        .slider:hover {
+            opacity: 1;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #2563eb;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #2563eb;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .slider-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            display: none;
+        }
+
+        .modal {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 90%;
+            max-width: 400px;
+        }
+        .modal h3 {
+            margin-top: 0;
+        }
+        .modal input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            box-sizing: border-box;
+        }
+        .modal .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .modal .modal-buttons button {
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            border-radius: 0.25rem;
+        }
+        
+        /* --- Footer Section --- */
+        .footer {
+            background-color: #111827;
+            color: #fff;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-link {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-link:hover {
+            color: #fff;
+        }
+
+        /* --- Media Queries for Responsiveness --- */
+        @media (min-width: 1024px) {
+            .nav-links {
+                display: flex;
+            }
+            .mobile-menu-btn, .mobile-menu {
+                display: none !important;
+            }
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .footer-links {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body class="scroll-smooth">
+
+    <!-- Header Section -->
+    <header class="header">
+        <nav class="container">
+            <div class="header-content">
+                <!-- Logo/Brand Name -->
+                <a href="index.html" class="logo-link">Bitez</a>
+                
+                <!-- Desktop Navigation Links -->
+                <div class="nav-links">
+                    <a href="index.html#features" class="nav-link">Features</a>
+                    <a href="index.html#about" class="nav-link">About</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                    <button class="btn btn-primary">Get Started</button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="mobile-menu-btn">
+                    <!-- Hamburger Icon -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Navigation Menu (Hidden by default) -->
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="index.html#features">Features</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+            <div class="px-6 py-2">
+                <button class="btn btn-primary" style="width: 100%;">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="text-3xl font-bold mb-4">Feeding Page</h1>
+            <div class="main-content-grid">
+
+                <!-- Card for Feeding Progress -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold" id="feeding-progress-title">Feeding Progress (2/day)</h3>
+                        <button class="add-btn" id="set-goal-btn">+</button>
+                    </div>
+                    <div class="progress-circle">
+                        <svg>
+                            <circle class="bg-circle" cx="75" cy="75" r="60"></circle>
+                            <circle class="progress" id="progress-circle" cx="75" cy="75" r="60"></circle>
+                        </svg>
+                        <div class="progress-circle-text" id="progress-text">0/2</div>
+                    </div>
+                    <div class="button-container">
+                        <button id="increment-btn" class="btn btn-primary">Fed</button>
+                        <button id="reset-btn" class="btn btn-secondary">Reset</button>
+                    </div>
+                </div>
+
+                <!-- Card for Supplements -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold">Supplements</h3>
+                        <button class="add-btn" id="add-supplement-btn">+</button>
+                    </div>
+                    <ul class="text-gray-700" id="supplements-list">
+                        <!-- Supplements list will be populated by JavaScript -->
+                    </ul>
+                </div>
+                
+                <!-- Card for Meal Plan -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold">Meal Plan</h3>
+                        <button class="add-btn" id="add-meal-btn">+</button>
+                    </div>
+                    <ul class="text-gray-700" id="meal-plan-list">
+                        <!-- Meal plan list will be populated by JavaScript -->
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal for Goal Setting -->
+    <div class="modal-overlay" id="goal-modal-overlay">
+        <div class="modal">
+            <h3 class="text-xl font-semibold mb-4">Set Daily Feeding Goal</h3>
+            <div class="slider-container">
+                <input type="range" min="0" max="5" value="2" class="slider" id="goal-slider">
+                <span id="slider-value" class="slider-value">2</span>
+            </div>
+            <div class="modal-buttons">
+                <button id="cancel-goal-btn" class="btn btn-secondary">Cancel</button>
+                <button id="save-goal-btn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Supplements -->
+    <div class="modal-overlay" id="supplement-modal-overlay">
+        <div class="modal">
+            <h3 class="text-xl font-semibold mb-4">Add Supplement</h3>
+            <input type="text" id="supplement-input" placeholder="e.g., Glucosamine for joints (1 chewable)">
+            <div class="modal-buttons">
+                <button id="cancel-supplement-btn" class="btn btn-secondary">Cancel</button>
+                <button id="save-supplement-btn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Meal Plan -->
+    <div class="modal-overlay" id="meal-modal-overlay">
+        <div class="modal">
+            <h3 class="text-xl font-semibold mb-4">Add Meal</h3>
+            <input type="text" id="meal-name-input" placeholder="e.g., Breakfast">
+            <input type="text" id="meal-food-input" placeholder="e.g., Kibble">
+            <div class="modal-buttons">
+                <button id="cancel-meal-btn" class="btn btn-secondary">Cancel</button>
+                <button id="save-meal-btn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Bitez. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for smooth scrolling, mobile menu toggle, and progress tracker -->
+    <script>
+        // Smooth scrolling for anchor links (will work for links on this page)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Feeding Progress Tracker Logic
+        const progressCircle = document.getElementById('progress-circle');
+        const progressText = document.getElementById('progress-text');
+        const incrementBtn = document.getElementById('increment-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const circumference = 2 * Math.PI * 60; // 2 * pi * r (r=60)
+        
+        let maxFeeds = localStorage.getItem('maxFeeds') ? parseInt(localStorage.getItem('maxFeeds')) : 2;
+        let feedCount = localStorage.getItem('feedingCount') ? parseInt(localStorage.getItem('feedingCount')) : 0;
+
+        // Set initial strokeDasharray for smooth transition
+        progressCircle.style.strokeDasharray = `${circumference}, ${circumference}`;
+
+        function updateProgress(count) {
+            let progress = (count / maxFeeds) * circumference;
+            progressCircle.style.strokeDashoffset = circumference - progress;
+            progressText.textContent = `${count}/${maxFeeds}`;
+
+            // Update the title
+            document.getElementById('feeding-progress-title').textContent = `Feeding Progress (${maxFeeds}/day)`;
+
+            // Disable the increment button if the max count is reached
+            if (count >= maxFeeds) {
+                incrementBtn.disabled = true;
+                incrementBtn.style.opacity = '0.5';
+                incrementBtn.style.cursor = 'not-allowed';
+            } else {
+                incrementBtn.disabled = false;
+                incrementBtn.style.opacity = '1';
+                incrementBtn.style.cursor = 'pointer';
+            }
+        }
+        
+        // Load count and maxFeeds from local storage on page load
+        updateProgress(feedCount);
+        
+        // Event listener for the "Fed" button
+        incrementBtn.addEventListener('click', () => {
+            if (feedCount < maxFeeds) {
+                feedCount++;
+                localStorage.setItem('feedingCount', feedCount);
+                updateProgress(feedCount);
+            }
+        });
+        
+        // Event listener for the "Reset" button
+        resetBtn.addEventListener('click', () => {
+            feedCount = 0;
+            localStorage.setItem('feedingCount', feedCount);
+            updateProgress(feedCount);
+        });
+        
+        // --- Goal Setting Modal Logic ---
+        const setGoalBtn = document.getElementById('set-goal-btn');
+        const goalModalOverlay = document.getElementById('goal-modal-overlay');
+        const goalSlider = document.getElementById('goal-slider');
+        const sliderValueSpan = document.getElementById('slider-value');
+        const saveGoalBtn = document.getElementById('save-goal-btn');
+        const cancelGoalBtn = document.getElementById('cancel-goal-btn');
+
+        setGoalBtn.addEventListener('click', () => {
+            goalModalOverlay.style.display = 'flex';
+            goalSlider.value = maxFeeds;
+            sliderValueSpan.textContent = maxFeeds;
+            const progress = (goalSlider.value / 5) * 100;
+            goalSlider.style.backgroundImage = `linear-gradient(to right, #4a90e2 ${progress}%, #d3d3d3 ${progress}%)`;
+        });
+
+        cancelGoalBtn.addEventListener('click', () => {
+            goalModalOverlay.style.display = 'none';
+        });
+
+        goalSlider.addEventListener('input', () => {
+            sliderValueSpan.textContent = goalSlider.value;
+            const progress = (goalSlider.value / 5) * 100;
+            goalSlider.style.backgroundImage = `linear-gradient(to right, #4a90e2 ${progress}%, #d3d3d3 ${progress}%)`;
+        });
+
+        saveGoalBtn.addEventListener('click', () => {
+            const newMaxFeeds = parseInt(goalSlider.value);
+            maxFeeds = newMaxFeeds;
+            localStorage.setItem('maxFeeds', maxFeeds);
+            
+            // If current feed count is higher than new max, reset it
+            if (feedCount > maxFeeds) {
+                feedCount = 0;
+                localStorage.setItem('feedingCount', feedCount);
+            }
+            updateProgress(feedCount);
+            goalModalOverlay.style.display = 'none';
+        });
+
+        // --- Supplements and Meal Plan List Logic ---
+        // DOM elements
+        const supplementsList = document.getElementById('supplements-list');
+        const mealPlanList = document.getElementById('meal-plan-list');
+        const addSupplementBtn = document.getElementById('add-supplement-btn');
+        const addMealBtn = document.getElementById('add-meal-btn');
+        const supplementModalOverlay = document.getElementById('supplement-modal-overlay');
+        const mealModalOverlay = document.getElementById('meal-modal-overlay');
+        const supplementInput = document.getElementById('supplement-input');
+        const mealNameInput = document.getElementById('meal-name-input');
+        const mealFoodInput = document.getElementById('meal-food-input');
+        const saveSupplementBtn = document.getElementById('save-supplement-btn');
+        const saveMealBtn = document.getElementById('save-meal-btn');
+        const cancelSupplementBtn = document.getElementById('cancel-supplement-btn');
+        const cancelMealBtn = document.getElementById('cancel-meal-btn');
+
+        // Function to save data to local storage
+        function saveToLocalStorage(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Function to load data from local storage
+        function loadFromLocalStorage(key) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        }
+
+        // Function to render supplements list
+        function renderSupplements() {
+            const supplements = loadFromLocalStorage('supplements');
+            supplementsList.innerHTML = '';
+            if (supplements.length === 0) {
+                const p = document.createElement('p');
+                p.className = 'text-gray-600 text-center text-sm mt-4';
+                p.textContent = 'No supplements added yet.';
+                supplementsList.appendChild(p);
+            } else {
+                supplements.reverse().forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${item}</span>
+                        <button class="delete-btn" data-index="${supplements.length - 1 - index}">&times;</button>
+                    `;
+                    supplementsList.appendChild(li);
+                });
+            }
+            // Add event listeners to delete buttons
+            document.querySelectorAll('#supplements-list .delete-btn').forEach(button => {
+                button.addEventListener('click', deleteSupplement);
+            });
+        }
+
+        // Function to delete a supplement
+        function deleteSupplement(event) {
+            const index = event.target.dataset.index;
+            const supplements = loadFromLocalStorage('supplements');
+            supplements.splice(index, 1);
+            saveToLocalStorage('supplements', supplements);
+            renderSupplements();
+        }
+
+        // Function to render meal plan list
+        function renderMealPlan() {
+            const mealPlan = loadFromLocalStorage('mealPlan');
+            mealPlanList.innerHTML = '';
+            if (mealPlan.length === 0) {
+                const p = document.createElement('p');
+                p.className = 'text-gray-600 text-center text-sm mt-4';
+                p.textContent = 'No meals added yet.';
+                mealPlanList.appendChild(p);
+            } else {
+                mealPlan.reverse().forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span><strong>${item.name}:</strong> ${item.food}</span>
+                        <button class="delete-btn" data-index="${mealPlan.length - 1 - index}">&times;</button>
+                    `;
+                    mealPlanList.appendChild(li);
+                });
+            }
+            // Add event listeners to delete buttons
+            document.querySelectorAll('#meal-plan-list .delete-btn').forEach(button => {
+                button.addEventListener('click', deleteMeal);
+            });
+        }
+
+        // Function to delete a meal
+        function deleteMeal(event) {
+            const index = event.target.dataset.index;
+            const mealPlan = loadFromLocalStorage('mealPlan');
+            mealPlan.splice(index, 1);
+            saveToLocalStorage('mealPlan', mealPlan);
+            renderMealPlan();
+        }
+
+        // Show modals
+        addSupplementBtn.addEventListener('click', () => {
+            supplementModalOverlay.style.display = 'flex';
+        });
+
+        addMealBtn.addEventListener('click', () => {
+            mealModalOverlay.style.display = 'flex';
+        });
+
+        // Hide modals
+        cancelSupplementBtn.addEventListener('click', () => {
+            supplementModalOverlay.style.display = 'none';
+        });
+
+        cancelMealBtn.addEventListener('click', () => {
+            mealModalOverlay.style.display = 'none';
+        });
+
+        // Save new supplement
+        saveSupplementBtn.addEventListener('click', () => {
+            const newSupplement = supplementInput.value.trim();
+            if (newSupplement) {
+                const supplements = loadFromLocalStorage('supplements');
+                supplements.push(newSupplement);
+                saveToLocalStorage('supplements', supplements);
+                supplementInput.value = '';
+                renderSupplements();
+                supplementModalOverlay.style.display = 'none';
+            }
+        });
+
+        // Save new meal
+        saveMealBtn.addEventListener('click', () => {
+            const newMealName = mealNameInput.value.trim();
+            const newMealFood = mealFoodInput.value.trim();
+            if (newMealName && newMealFood) {
+                const mealPlan = loadFromLocalStorage('mealPlan');
+                mealPlan.push({ name: newMealName, food: newMealFood });
+                saveToLocalStorage('mealPlan', mealPlan);
+                mealNameInput.value = '';
+                mealFoodInput.value = '';
+                renderMealPlan();
+                mealModalOverlay.style.display = 'none';
+            }
+        });
+
+        // Initial render on page load
+        renderSupplements();
+        renderMealPlan();
+
+    </script>
+</body>
+</html>
