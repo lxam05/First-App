@@ -1,2 +1,3 @@
 # First-App
 This is an app that will be constantly updated and is for pet owners
+i created this app with help from google gemini. I plan for it to be used widely by all families or even single people who are pet owners. I am trying to make it as minimal and straight to the point as possible so that owners can easily and directly communicate to the co-owners of the pet about their pet. I am currently working myself to learn about databases and how to store and access information from the app and this will be the next step along with updating the main home page to allow users to get where they need to be even quicker. Then I plan on adding widgets for even easier access to information about their pet.
